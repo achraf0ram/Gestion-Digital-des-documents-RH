@@ -19,6 +19,11 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 
+// import { Label } from "@/components/ui/label";
+// import { useToast } from "@/hooks/use-toast";
+// import { useAuth } from "@/contexts/AuthContext";
+// import { Loader2 } from "lucide-react";
+
 const profileFormSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),

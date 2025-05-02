@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FileText,
   ClipboardCheck,
@@ -16,12 +16,16 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const AppSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { t, language } = useLanguage();
   const isMobile = useIsMobile();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const { logout, user } = useAuth();
+  const navigate = useNavigate();
+  
 
   const menuItems = [
     { icon: Home, name: 'home', path: "/" },
@@ -30,7 +34,13 @@ export const AppSidebar = () => {
     { icon: Calendar, name: 'vacationRequest', path: "/vacation-request" },
     { icon: Settings, name: 'settings', path: "/settings" },
   ];
-const chevronIcon = language === 'ar' ? 
+
+  const handleSignOut = () => {
+    logout();
+    navigate("/sign-in");
+  };
+
+  const chevronIcon = language === 'ar' ? 
   (collapsed ? 
     <ChevronLeft size={18} /> : 
     <ChevronRight size={18} />) :
@@ -127,7 +137,9 @@ const chevronIcon = language === 'ar' ?
             <div className="w-8 h-8 rounded-full bg-[#D3E4FD] flex items-center justify-center">
               <User size={16} className="text-[#0EA5E9]" />
             </div>
-            {!collapsed && <div className="text-sm">Achraf Ramdani</div>}
+            {!collapsed && (
+              <div className="text-sm">{user?.fullName || "user"}</div>
+            )}
           </div>
           <Button
             variant="ghost"
@@ -136,6 +148,7 @@ const chevronIcon = language === 'ar' ?
               "hover:bg-[#FDE1D3] hover:text-red-500 text-muted-foreground",
               collapsed && "justify-center"
             )}
+            onClick={handleSignOut}
           >
             <LogOut size={18} />
             {!collapsed && <span>{t('logout')}</span>}
