@@ -21,6 +21,7 @@ class EnsureEmailIsVerified
             ! $request->user()->hasVerifiedEmail())) {
             return response()->json(['message' => 'Your email address is not verified.'], 409);
         }
+        
 
         return $next($request);
     }
